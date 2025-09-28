@@ -42,3 +42,31 @@ export async function createBook(req: Request, res: Response) {
     res.status(500).json({ error: "Failed to create book" });
   }
 }
+
+// Update book
+export async function updateBook(req: Request, res: Response) {
+  const { id } = req.params;
+  const { title, author } = req.body;
+  try {
+    const book = await prisma.book.update({
+      where: { id: Number(id) },
+      data: { title, author },
+    });
+    res.json(book);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update book" });
+  }
+}
+
+// Delete book
+export async function deleteBook(req: Request, res: Response) {
+  const { id } = req.params;
+  try {
+    await prisma.book.delete({
+      where: { id: Number(id) },
+    });
+    res.json({ message: "Book deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete book" });
+  }
+}
